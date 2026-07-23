@@ -9,15 +9,25 @@
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        unordered_set<ListNode*> mp;
-        ListNode* curr=head;
-        while(curr != NULL) {
-            if(mp.find(curr)!=mp.end()){
-                return curr;
+        // first step
+        ListNode* slow=head;
+        ListNode* fast=head;
+        while(fast != NULL && fast->next != NULL) {
+            slow=slow->next;
+            fast=fast->next->next;
+            if(slow==fast){
+                break;
             }
-            mp.insert(curr);
-            curr=curr->next;
         }
-        return NULL;
+        if(fast==NULL || fast->next==NULL){
+            return NULL;
+        }
+        // step 2- find second meeting point
+        fast=head;
+        while(slow != fast){
+            slow=slow->next;
+            fast=fast->next;
+        }
+        return slow; //return fast
     }
 };
