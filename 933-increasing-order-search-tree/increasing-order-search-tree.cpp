@@ -10,24 +10,24 @@
  * };
  */
 class Solution {
-public:
-    void inorder(TreeNode* root, vector<int> &nums) {
-        if(root==NULL) return;
-        inorder(root->left, nums);
-        nums.push_back(root->val);
-        inorder(root->right, nums);
+
+TreeNode* curr;
+    void inorder(TreeNode* root) {
+        if(root==NULL) return; //base case
+        inorder(root->left); //left recursion
+        root->left=nullptr; //re-linking
+        curr->right=root;
+        curr=root;
+        inorder(root->right); //right recursion
     }
+    public:
     TreeNode* increasingBST(TreeNode* root) {
-        vector<int> nums;
-        inorder(root, nums);
+        
         TreeNode* dummy=new TreeNode(0);
-        TreeNode* curr=dummy;
-        for(int val: nums) {
-            TreeNode* node=new TreeNode(val);
-            node->left=node->right=NULL;
-            curr->right=node;
-            curr=node;
-        }
+        
+        curr=dummy;
+        inorder(root);
+       
         return dummy->right;
     }
 }; 
