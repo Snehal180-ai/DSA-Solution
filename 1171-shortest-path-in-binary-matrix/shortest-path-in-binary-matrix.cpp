@@ -12,14 +12,16 @@ public:
         {-1,0},{1,0},{0,-1},{0,1},{-1,-1},{-1,1},{1,-1},{1,1}
     };
 
-    queue<array<int,3>> q;
+    vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
 
-    q.push({0,0,1});
-    grid[0][0]=1;
+    priority_queue<array<int, 3>,vector<array<int, 3>>,greater<array<int, 3>>> pq;
+    
+    dist[0][0]=1;
+    pq.push({1,0,0});
 
-    while(!q.empty()){
-        auto[r,c,d]=q.front();
-        q.pop();
+    while(!pq.empty()){
+        auto[d,r,c]=pq.top();
+        pq.pop();
 
         if(r==n-1 && c==n-1){
             return d;
@@ -30,7 +32,10 @@ public:
             int nc=c+y;
             if(nr>=0 && nc>=0 && nr<n && nc<n && grid[nr][nc]==0){
                 grid[nr][nc]=1;
-                q.push({nr,nc,d+1});
+                int newdist=d+1;
+                if(newdist<dist[nr][nc]){
+                    pq.push({newdist,nr,nc});
+                }
             }
         }
     }
