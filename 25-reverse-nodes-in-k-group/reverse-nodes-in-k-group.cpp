@@ -11,26 +11,28 @@
 class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
+        // check the length of curr group
         ListNode* temp = head;
-
-        for (int i = 0; i < k; i++) {
+        int cnt=0;
+        while(cnt<k) {
+            // base case
             if (temp == nullptr)
                 return head;
             temp = temp->next;
+            cnt++;
         }
-
-        ListNode* prev = nullptr;
-        ListNode* curr = head;
-
-        for (int i = 0; i < k; i++) {
-            ListNode* nextNode = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = nextNode;
+        // go ahead for rest of ll
+        ListNode* prev = reverseKGroup(temp, k);
+        // now reverse the curr group and fit
+        temp=head;
+        cnt=0;
+        while(cnt<k){
+            ListNode* nxt = temp->next;
+            temp->next=prev;
+            prev=temp;
+            temp=nxt;
+            cnt++;
         }
-
-        head->next = reverseKGroup(curr, k);
-
         return prev;
 
     }
